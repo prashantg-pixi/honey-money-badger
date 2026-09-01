@@ -1,0 +1,4 @@
+{
+  "extends": "@veyra/tsconfig/app.json",
+  "include": ["src"]
+}

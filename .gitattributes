@@ -1,0 +1,24 @@
+# Normalize all text to LF in the repo and working tree (matches Prettier endOfLine: lf).
+* text=auto eol=lf
+
+# Binary assets — never touch line endings.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.svg text eol=lf
+*.mp3 binary
+*.wav binary
+*.ogg binary
+*.m4a binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.pdf binary
+
+# Spine / atlas / lockfiles are text.
+*.atlas text eol=lf
+*.skel binary
+pnpm-lock.yaml text eol=lf

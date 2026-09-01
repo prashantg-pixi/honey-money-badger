@@ -1,0 +1,9 @@
+{
+  "provider": "@veyra/provider-offline",
+  "roundDriver": "@veyra/provider-offline",
+  "host": "@veyra/host-standalone",
+  "packages": ["@veyra/provider-offline", "@veyra/host-standalone"],
+  "recoveryScope": "honey-money-badger.offline",
+  "audit": false,
+  "bookSchemas": []
+}

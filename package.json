@@ -1,0 +1,46 @@
+{
+  "name": "@veyra/game-honey-money-badger",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "dev": "vite",
+    "build": "veyra-build-targets",
+    "build:testing-ground": "vite build",
+    "assets": "veyra-assetpack",
+    "assets:watch": "veyra-assetpack --watch"
+  },
+  "dependencies": {
+    "@veyra/contracts": "workspace:*",
+    "@veyra/core": "workspace:*",
+    "@veyra/devtools": "workspace:*",
+    "@veyra/flow": "workspace:*",
+    "@veyra/host": "workspace:*",
+    "@veyra/host-standalone": "workspace:*",
+    "@veyra/intent": "workspace:*",
+    "@veyra/layout": "workspace:*",
+    "@veyra/layout-pixi": "workspace:*",
+    "@veyra/logger": "workspace:*",
+    "@veyra/money": "workspace:*",
+    "@veyra/presentation-reels": "workspace:*",
+    "@veyra/presentation-symbols": "workspace:*",
+    "@veyra/presentation-wins": "workspace:*",
+    "@veyra/provider-core": "workspace:*",
+    "@veyra/provider-offline": "workspace:*",
+    "@veyra/renderer": "workspace:*",
+    "@veyra/signals": "workspace:*",
+    "@veyra/stores": "workspace:*",
+    "@veyra/system-resize": "workspace:*",
+    "@veyra/timeline": "workspace:*",
+    "@veyra/ui-kit": "workspace:*"
+  },
+  "devDependencies": {
+    "@veyra/devkit": "workspace:*",
+    "@veyra/tool-assetpack": "workspace:*",
+    "@veyra/tsconfig": "workspace:*",
+    "@veyra/vite-config": "workspace:*",
+    "vite": "6.2.0"
+  }
+}
