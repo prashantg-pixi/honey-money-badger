@@ -5,12 +5,12 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "dev": "vite",
-    "build": "veyra-build-targets",
-    "build:testing-ground": "vite build",
     "assets": "veyra-assetpack",
-    "assets:watch": "veyra-assetpack --watch"
+    "assets:watch": "veyra-assetpack --watch",
+    "build": "veyra-build-targets",
+    "build:editor": "vite build",
+    "dev": "vite",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@veyra/contracts": "workspace:*",
@@ -38,6 +38,19 @@
   },
   "devDependencies": {
     "@veyra/devkit": "workspace:*",
+    "@veyra/editor": "workspace:*",
+    "@veyra/editor-tool-assets": "workspace:*",
+    "@veyra/editor-tool-audio": "workspace:*",
+    "@veyra/editor-tool-fixtures": "workspace:*",
+    "@veyra/editor-tool-fx": "workspace:*",
+    "@veyra/editor-tool-layout": "workspace:*",
+    "@veyra/editor-tool-platform": "workspace:*",
+    "@veyra/editor-tool-reels": "workspace:*",
+    "@veyra/editor-tool-skin": "workspace:*",
+    "@veyra/editor-tool-story": "workspace:*",
+    "@veyra/editor-tool-text": "workspace:*",
+    "@veyra/editor-tool-timeline": "workspace:*",
+    "@veyra/editor-tool-verify": "workspace:*",
     "@veyra/tool-assetpack": "workspace:*",
     "@veyra/tsconfig": "workspace:*",
     "@veyra/vite-config": "workspace:*",
