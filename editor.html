@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Honey Money Badger — Editor</title>
+    <!--
+      The shell stylesheet is linked, not imported (03 §18.7): plain CSS with custom properties
+      and no build step, so the shell module graph stays loadable with no bundler in the way.
+    -->
+    <link rel="stylesheet" href="/node_modules/@veyra/editor/src/editor.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #151515;
+      }
+      /* `.veyra-editor` is `position: fixed; inset: 0` — the host needs no size. */
+      /* Canvas is inline by default — the baseline whitespace adds a scrollbar. */
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="editor"></div>
+    <script type="module" src="/src/editor.ts"></script>
+  </body>
+</html>
