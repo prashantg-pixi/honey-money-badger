@@ -64,7 +64,7 @@ export interface EditorDocumentKind {
 /**
  * Every kind `EDITOR_TOOLS` declares, in the order the tools are composed.
  *
- * Nine kinds from twelve tools: `storyTool`, `assetsTool`, `platformTool` and `verifyTool` declare
+ * Ten kinds from twelve tools: `storyTool`, `assetsTool`, `platformTool` and `verifyTool` declare
  * no documents — a tool with panels and no format is legal and is what T0 and the read-only tools
  * are (03 §18.6, FR-EDIT-101). `.paylines.json` and `.paytable.json` are absent from every game's
  * table for a different reason: they have strict loaders and no declared `DocumentKind`
@@ -84,6 +84,12 @@ export const EDITOR_DOCUMENT_KINDS: readonly EditorDocumentKind[] = [
   // `timelineTool()` — @veyra/editor-tool-timeline, `sequenceKind`. The one abbreviated extension
   // in the repo: a `sequence` is `.seq.json` (06 §9).
   { kind: 'sequence', extension: '.seq.json', globs: ['src/**/*.seq.json'] },
+
+  // `timelineTool()` again — `animationKind`. Declared second, so the write path's longest-extension
+  // match is unambiguous between the two. It could not exist until `@veyra/motion` grew
+  // `parseAnimation`: `DocumentKind.load` must be the owning package's document-returning parser by
+  // identity (FR-EDIT-4), and `loadAnimation` returns the compiled `Animation`.
+  { kind: 'animation', extension: '.animation.json', globs: ['src/**/*.animation.json'] },
 
   // `fxTool()` — @veyra/editor-tool-fx, `emitterKind`.
   { kind: 'emitter', extension: '.emitter.json', globs: ['src/**/*.emitter.json'] },
