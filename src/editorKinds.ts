@@ -115,3 +115,55 @@ export const EDITOR_DOCUMENT_KINDS: readonly EditorDocumentKind[] = [
   // opposite of `layout`, because a skin's `partLayout` carries a table per orientation inside it.
   { kind: 'skin', extension: '.skin.json', globs: ['src/**/*.skin.json'] },
 ];
+
+/**
+ * A **resource**: a declared file family the editor may reach that is not a document kind
+ * (FR-EDIT-114). Mirrors the shell's `ProjectResource`, restated for the reason above.
+ */
+export interface EditorProjectResource {
+  /** Stable id the client lists by, and what a refusal names. */
+  readonly id: string;
+  /** Game-relative globs, POSIX separators. Nothing outside them is listed, read or written. */
+  readonly globs: readonly string[];
+  /**
+   * Whether `write`, `delete` and `move` may touch it.
+   *
+   * Required, with no default: read-only and writable are different security postures, and a missing
+   * flag must not quietly pick one. The shim refuses an entry that omits it.
+   */
+  readonly writable: boolean;
+}
+
+/**
+ * The non-document files this game's editor may reach.
+ *
+ * The protocol used to reach only `.<kind>.json` paths, which is the single root cause behind six
+ * separate filings — the CSV grid (FR-EDIT-72, P0), the pack-config tool, the manifest tool and the
+ * golden rail among them. None of those is a `DocumentKind` and none should become one: a kind
+ * carries a strict loader, a serializer and a round-trip rail, and a CSV or a build output has no
+ * business pretending to.
+ *
+ * **Exactly one is writable**, and the split is the point. `messages.csv` is authored, so the editor
+ * must be able to save it. The pack config, a built manifest and a golden are **shown and not
+ * edited**: the build owns them, and a write endpoint that could replace a golden would let the
+ * editor mark its own homework.
+ *
+ * A glob here must not overlap a `EDITOR_DOCUMENT_KINDS` glob — the service refuses a path both
+ * families claim rather than picking a winner, since which rules apply (including whether it is
+ * writable) must not depend on declaration order. `editorKinds.test.ts` checks that here rather than
+ * leaving it to a 403 at runtime.
+ */
+export const EDITOR_PROJECT_RESOURCES: readonly EditorProjectResource[] = [
+  // FR-EDIT-72's transport half. The one authored file in this list.
+  { id: 'messages', globs: ['raw-assets/i18n/messages.csv'], writable: true },
+
+  // T9 — the AssetPack config, read so the pack tool can show what it is configured with.
+  { id: 'pack-config', globs: ['assetpack.config.js'], writable: false },
+
+  // T10 — a built manifest. The one family that lives under `dist/`, which the service's walk enters
+  // only because this glob names it.
+  { id: 'manifest', globs: ['dist/**/manifest.json'], writable: false },
+
+  // T11 — the golden rail. Read-only is load-bearing here rather than conservative.
+  { id: 'golden', globs: ['src/**/__golden__/*.golden'], writable: false },
+];

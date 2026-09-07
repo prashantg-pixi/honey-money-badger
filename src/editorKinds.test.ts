@@ -3,7 +3,11 @@
  */
 import { describe, expect, it } from 'vitest';
 import { collectDocumentKinds, EDITOR_TOOLS } from './editor';
-import { EDITOR_DOCUMENT_KINDS, type EditorDocumentKind } from './editorKinds';
+import {
+  EDITOR_DOCUMENT_KINDS,
+  EDITOR_PROJECT_RESOURCES,
+  type EditorDocumentKind,
+} from './editorKinds';
 
 /**
  * **The anti-drift rail for `editorKinds.ts`, and the reason that hand-written copy is allowed to
@@ -80,6 +84,49 @@ describe('EDITOR_DOCUMENT_KINDS', () => {
         expect(glob.startsWith('/')).toBe(false);
         expect(glob.includes('\\')).toBe(false);
         expect(glob.endsWith(kind.extension)).toBe(true);
+      }
+    }
+  });
+});
+
+describe('the resource family (FR-EDIT-114)', () => {
+  it('declares `writable` explicitly on every entry', () => {
+    // No default, because read-only and writable are different security postures. The shim refuses
+    // an entry that omits it; this catches the omission a commit earlier.
+    expect(EDITOR_PROJECT_RESOURCES.length).toBeGreaterThan(0);
+    for (const resource of EDITOR_PROJECT_RESOURCES) {
+      expect(typeof resource.writable, resource.id).toBe('boolean');
+      expect(resource.globs.length, resource.id).toBeGreaterThan(0);
+    }
+  });
+
+  it('keeps exactly the authored file writable', () => {
+    const writable = EDITOR_PROJECT_RESOURCES.filter((entry) => entry.writable).map(
+      (entry) => entry.id,
+    );
+    // A build output the editor could overwrite would let it mark its own homework.
+    expect(writable).toEqual(['messages']);
+  });
+
+  it('overlaps no document kind, which the service would refuse at runtime', () => {
+    // The service refuses a path both families claim rather than resolving it by precedence. That is
+    // right, and it is a 403 an author meets while trying to open a file — so the collision is worth
+    // catching here, where it names the two declarations instead of one path.
+    const kindGlobs = new Set(EDITOR_DOCUMENT_KINDS.flatMap((kind) => kind.globs));
+    for (const resource of EDITOR_PROJECT_RESOURCES) {
+      for (const glob of resource.globs) {
+        expect(kindGlobs.has(glob), `${resource.id} reuses a document kind's glob`).toBe(false);
+      }
+    }
+    // Extensions rather than globs is the sharper check: every kind is `.<kind>.json`, so a resource
+    // whose glob ends in one would be claimed by both however the paths are written.
+    const extensions = EDITOR_DOCUMENT_KINDS.map((kind) => kind.extension);
+    for (const resource of EDITOR_PROJECT_RESOURCES) {
+      for (const glob of resource.globs) {
+        expect(
+          extensions.some((extension) => glob.endsWith(extension)),
+          `${resource.id} declares "${glob}", which a document kind already claims`,
+        ).toBe(false);
       }
     }
   });
