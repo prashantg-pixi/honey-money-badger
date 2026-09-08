@@ -64,11 +64,12 @@ export interface EditorDocumentKind {
 /**
  * Every kind `EDITOR_TOOLS` declares, in the order the tools are composed.
  *
- * Ten kinds from twelve tools: `storyTool`, `assetsTool`, `platformTool` and `verifyTool` declare
+ * Twelve kinds from twelve tools: `storyTool`, `assetsTool`, `platformTool` and `verifyTool` declare
  * no documents — a tool with panels and no format is legal and is what T0 and the read-only tools
- * are (03 §18.6, FR-EDIT-101). `.paylines.json` and `.paytable.json` are absent from every game's
- * table for a different reason: they have strict loaders and no declared `DocumentKind`
- * (FR-EDIT-31/32 unbuilt), so the editor cannot open them and this table must not pretend otherwise.
+ * are (03 §18.6, FR-EDIT-101). `.paylines.json` and `.paytable.json` were absent from every
+ * game's table until FR-EDIT-31/32 declared their kinds; they are here now. The panels that *edit*
+ * them are still unbuilt, and a declared kind does not pretend otherwise — it is what lets the
+ * Project panel list the file and the Inspector open it.
  */
 export const EDITOR_DOCUMENT_KINDS: readonly EditorDocumentKind[] = [
   // `layoutTool()` — @veyra/editor-tool-layout, `layoutKind`. One document **per orientation**
@@ -80,6 +81,18 @@ export const EDITOR_DOCUMENT_KINDS: readonly EditorDocumentKind[] = [
   // finds, and a game with a second table needs no change here.
   { kind: 'symbols', extension: '.symbols.json', globs: ['src/**/*.symbols.json'] },
   { kind: 'strips', extension: '.strips.json', globs: ['src/**/*.strips.json'] },
+
+  // `reelsTool()` again — `paylinesKind` and `paytableKind` (FR-EDIT-31/32). Both tables already
+  // loaded at boot through their own strict loaders and, until those kinds were declared, could not
+  // be opened in the editor that exports them — which is the gap the capstone journey named, and
+  // asserted, so that the day it closed would be noticed rather than assumed.
+  //
+  // **Declaring a kind is not a claim that its panel exists.** The payline shape editor wants the
+  // widget kit's table keyboard navigation, which is not built. What a declared kind buys meanwhile
+  // is the Project panel listing the file and the Inspector opening it — strictly more than the
+  // nothing that came before, and honest about the rest.
+  { kind: 'paylines', extension: '.paylines.json', globs: ['src/**/*.paylines.json'] },
+  { kind: 'paytable', extension: '.paytable.json', globs: ['src/**/*.paytable.json'] },
 
   // `timelineTool()` — @veyra/editor-tool-timeline, `sequenceKind`. The one abbreviated extension
   // in the repo: a `sequence` is `.seq.json` (06 §9).
